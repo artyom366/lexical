@@ -1,0 +1,10 @@
+procedure TForm1.Button2Click(SEnder: TObject);
+var F: Integer;
+Begin
+ if Form1.Button2.Caption='Cancel ON' Then
+Begin
+Form1.Button2.Caption:='Previous OFF';
+Form1.Button1.Caption:='Next dfff'
+End;
+ if FilePos(F)>0 then Seek(F,FilePos(F)-1);
+End; 
