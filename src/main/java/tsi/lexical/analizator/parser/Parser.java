@@ -13,6 +13,7 @@ public class Parser {
 
     private static boolean isNum; //numeric const trigger
     private static boolean isStr; //string const trigger
+    private static boolean isValid; //does text contains invalid characters
 
     public static List<Lexeme> textRunner(String text,
                                           Map<String, Boolean> keywords,
@@ -22,7 +23,9 @@ public class Parser {
         StringBuilder stringBuilderVariable = new StringBuilder();
         StringBuilder stringBuilderSpecial = new StringBuilder();
         List<Lexeme> lexemes = new ArrayList<>();
+        List<Lexeme> errors = new ArrayList<>();
 
+        isValid = true; //set the trigger, assume that the text is valid
 
         for (int i = 0; i < text.length(); i++) {
 
@@ -61,7 +64,12 @@ public class Parser {
 
                     //unless it is not a carriage return
                     if (c != 10) {
-                        System.out.println("Invalid character: " + (int) c);
+                        System.out.println("Invalid character code: " + (int) c + ", value: " + c);
+
+                        Lexeme error = new Lexeme("err", c + "");
+                        errors.add(error);
+
+                        isValid = false;
 
                     } else {
 
@@ -107,7 +115,7 @@ public class Parser {
             }
         }
 
-        return lexemes;
+        return isValid ? lexemes : errors;
     }
 
     private static void specialHelper(StringBuilder stringBuilderSpecial, Map<String, Boolean> specialsDouble, List<Lexeme> lexemes) {
