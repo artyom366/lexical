@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class FileUtils {
 
-    public static Map<String, Boolean> configFileReader(String fileName) {
+    public static Map<String, Boolean> configFileReader(String fileName) throws IOException {
 
         Map<String, Boolean> paramMap = new HashMap<>();
 
@@ -25,16 +25,13 @@ public class FileUtils {
             while ((current = bufferedReader.readLine()) != null) {
                 paramMap.put(current, true);
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         System.out.println("File: " + fileName + ": OK");
         return paramMap;
     }
 
-    public static String fileReader(String fileName) {
+    public static String fileReader(String fileName) throws IOException {
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -49,15 +46,12 @@ public class FileUtils {
             }
 
             System.out.println("\n");
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return stringBuilder.toString();
     }
 
-    public static void resultWriter(List<Lexeme> lexemes, String fileName) {
+    public static void resultWriter(List<Lexeme> lexemes, String fileName) throws IOException {
 
         for (Lexeme lexeme : lexemes) {
             System.out.println(lexeme.toString());
@@ -68,12 +62,7 @@ public class FileUtils {
             for (Lexeme lexeme : lexemes) {
 
                 bufferedWriter.write(lexeme.toString() + "\n");
-
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
     }
 }

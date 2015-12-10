@@ -4,6 +4,7 @@ import tsi.lexical.analizator.domain.Lexeme;
 import tsi.lexical.analizator.parser.Parser;
 import tsi.lexical.analizator.utils.FileUtils;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,14 +21,44 @@ public class App {
 
     public static void main(String[] args) {
 
-        Map<String, Boolean> keywords = FileUtils.configFileReader(KEYWORDS_FILE_NAME);
-        Map<String, Boolean> specials = FileUtils.configFileReader(SPECIALS_FILE_NAME);
-        Map<String, Boolean> specialsDouble = FileUtils.configFileReader(SPECIALS_DOUBLE_FILE_NAME);
+        Map<String, Boolean> keywords = null;
+        try {
+            keywords = FileUtils.configFileReader(KEYWORDS_FILE_NAME);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
 
-        String text = FileUtils.fileReader(INPUT_FILE_NAME);
+        Map<String, Boolean> specials = null;
+        try {
+            specials = FileUtils.configFileReader(SPECIALS_FILE_NAME);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Map<String, Boolean> specialsDouble = null;
+        try {
+            specialsDouble = FileUtils.configFileReader(SPECIALS_DOUBLE_FILE_NAME);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        String text = null;
+        try {
+            text = FileUtils.fileReader(INPUT_FILE_NAME);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
 
         List<Lexeme> lexemes = Parser.textRunner(text, keywords, specials, specialsDouble);
 
-        FileUtils.resultWriter(lexemes, OUTPUT_FILE_NAME);
+        try {
+            FileUtils.resultWriter(lexemes, OUTPUT_FILE_NAME);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
