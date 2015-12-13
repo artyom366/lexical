@@ -3,10 +3,10 @@ package tsi.lexical.analizator.domain;
 /**
  * Created by artyom on 15.3.12.
  */
-public class Lexeme {
+public class Lexeme implements ILexeme {
 
-    String name;
-    String value;
+    private String name;
+    private String value;
 
     public Lexeme(String name, String value) {
         this.name = name;
@@ -32,6 +32,11 @@ public class Lexeme {
     @Override
     public String toString() {
         return name + ": " + value;
+    }
+
+    @Override
+    public void display() {
+        System.out.println(toString());
     }
 }
 

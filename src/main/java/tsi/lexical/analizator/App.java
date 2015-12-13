@@ -1,5 +1,6 @@
 package tsi.lexical.analizator;
 
+import tsi.lexical.analizator.domain.ILexeme;
 import tsi.lexical.analizator.domain.Lexeme;
 import tsi.lexical.analizator.parser.Parser;
 import tsi.lexical.analizator.utils.FileUtils;
@@ -53,7 +54,7 @@ public class App {
             return;
         }
 
-        List<Lexeme> lexemes = Parser.textRunner(text, keywords, specials, specialsDouble);
+        List<ILexeme> lexemes = Parser.textRunner(text, keywords, specials, specialsDouble);
 
         try {
             FileUtils.resultWriter(lexemes, OUTPUT_FILE_NAME);

@@ -1,5 +1,7 @@
 package tsi.lexical.analizator.utils;
 
+
+import tsi.lexical.analizator.domain.ILexeme;
 import tsi.lexical.analizator.domain.Lexeme;
 
 import java.io.*;
@@ -51,18 +53,19 @@ public class FileUtils {
         return stringBuilder.toString();
     }
 
-    public static void resultWriter(List<Lexeme> lexemes, String fileName) throws IOException {
+    public static void resultWriter(List<ILexeme> lexemes, String fileName) throws IOException {
 
-        for (Lexeme lexeme : lexemes) {
-            System.out.println(lexeme.toString());
+        for (ILexeme lexeme : lexemes) {
+
+            lexeme.display();
         }
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName))) {
-
-            for (Lexeme lexeme : lexemes) {
-
-                bufferedWriter.write(lexeme.toString() + "\n");
-            }
-        }
+//        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName))) {
+//
+//            for (ILexeme lexeme : lexemes) {
+//
+//                bufferedWriter.write(lexeme.toString() + "\n");
+//            }
+//        }
     }
 }

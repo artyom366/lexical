@@ -1,8 +1,11 @@
 package tsi.lexical.analizator.parser;
 
-import tsi.lexical.analizator.domain.Lexeme;
+import tsi.lexical.analizator.domain.*;
+import tsi.lexical.analizator.domain.Error;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -15,15 +18,15 @@ public class Parser {
     private static boolean isStr; //string const trigger
     private static boolean isValid; //does text contains invalid characters
 
-    public static List<Lexeme> textRunner(String text,
+    public static List<ILexeme> textRunner(String text,
                                           Map<String, Boolean> keywords,
                                           Map<String, Boolean> specials,
                                           Map<String, Boolean> specialsDouble) {
 
         StringBuilder stringBuilderVariable = new StringBuilder();
         StringBuilder stringBuilderSpecial = new StringBuilder();
-        List<Lexeme> lexemes = new ArrayList<>();
-        List<Lexeme> errors = new ArrayList<>();
+        List<ILexeme> lexemes = new ArrayList<>();
+        List<ILexeme> errors = new ArrayList<>();
 
         isValid = true; //set the trigger, assume that the text is valid
 
@@ -66,8 +69,7 @@ public class Parser {
                     if (c != 10) {
                         System.out.println("Invalid character code: " + (int) c + ", value: " + c);
 
-                        Lexeme error = new Lexeme("err", c + "");
-                        errors.add(error);
+                        errorHelper(errors, text, i);
 
                         isValid = false;
 
@@ -109,7 +111,6 @@ public class Parser {
 
                         stringBuilderVariable.append(c);
                         j++;
-
                     }
                 }
             }
@@ -118,7 +119,7 @@ public class Parser {
         return isValid ? lexemes : errors;
     }
 
-    private static void specialHelper(StringBuilder stringBuilderSpecial, Map<String, Boolean> specialsDouble, List<Lexeme> lexemes) {
+    private static void specialHelper(StringBuilder stringBuilderSpecial, Map<String, Boolean> specialsDouble, List<ILexeme> lexemes) {
 
         //special single
         if (stringBuilderSpecial.length() == 1) {
@@ -165,7 +166,7 @@ public class Parser {
         }
     }
 
-    private static void variableHelper(Map<String, Boolean> keywords, StringBuilder stringBuilderVariable, List<Lexeme> lexemes) {
+    private static void variableHelper(Map<String, Boolean> keywords, StringBuilder stringBuilderVariable, List<ILexeme> lexemes) {
 
         //keyword
         if (keywords.get(stringBuilderVariable.toString().toLowerCase()) != null) {
@@ -196,5 +197,34 @@ public class Parser {
             isNum = true; //set trigger
             isStr = false; //reset trigger
         }
+    }
+
+    private static void errorHelper(List<ILexeme> errors, String text, int position) {
+
+        int offset = 8, start, end, spacesLen;
+
+        if (position >= offset) {
+            start = position - offset;
+            spacesLen = offset + 1;
+        } else {
+            start = 0;
+            spacesLen = position + 1;
+        }
+
+        if (position + offset <= text.length() - 1) {
+            end = position + 8;
+        } else {
+            end = text.length() - 1;
+        }
+
+        char[] spaces = new char[spacesLen];
+        Arrays.fill(spaces, '_');
+        spaces[spaces.length - 1] = '^';
+
+        String errorFragment = text.substring(start, end + 1).replace((char)10, ' ');
+        String errorPosition = new String(spaces);
+
+        Error error = new Error("err", text.charAt(position) + "", (int)text.charAt(position), errorFragment, errorPosition);
+        errors.add(error);
     }
 }
