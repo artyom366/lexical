@@ -60,12 +60,12 @@ public class FileUtils {
             lexeme.display();
         }
 
-//        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName))) {
-//
-//            for (ILexeme lexeme : lexemes) {
-//
-//                bufferedWriter.write(lexeme.toString() + "\n");
-//            }
-//        }
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName))) {
+
+            for (ILexeme lexeme : lexemes) {
+
+                bufferedWriter.write(lexeme.toString() + "\n");
+            }
+        }
     }
 }

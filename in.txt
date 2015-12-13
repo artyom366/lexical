@@ -1,4 +1,4 @@
-procedure TForm1.Button2Click(SEnder: TObject);
+proce|dure TForm1.Button2Click(SEnder: TObject);
 var F: Integer;
 Begin
  if Form1.Button2.Caption='Cancel' Then
