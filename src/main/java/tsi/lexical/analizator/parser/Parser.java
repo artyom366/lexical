@@ -18,7 +18,7 @@ public class Parser {
     private static boolean isStr; //string const trigger
     private static boolean isValid; //does text contains invalid characters
 
-    public static List<ILexeme> textRunner(String text,
+    public static List<ILexeme> textRunner(Text text,
                                           Map<String, Boolean> keywords,
                                           Map<String, Boolean> specials,
                                           Map<String, Boolean> specialsDouble) {
@@ -30,11 +30,11 @@ public class Parser {
 
         isValid = true; //set the trigger, assume that the text is valid
 
-        for (int i = 0; i < text.length(); i++) {
+        for (int line = 1, localPosition = 0, i = 0; i < text.getText().length(); i++, localPosition++) {
 
             if (!isStr) {
 
-                char c = text.charAt(i);
+                char c = text.getText().charAt(i);
 
                 if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) { // A-Z a-z
 
@@ -69,7 +69,7 @@ public class Parser {
                     if (c != 10) {
                         System.out.println("Invalid character code: " + (int) c + ", value: " + c);
 
-                        errorHelper(errors, text, i);
+                        errorHelper(errors, text, i, line, localPosition);
 
                         isValid = false;
 
@@ -77,6 +77,12 @@ public class Parser {
 
                         //carriage return is a special symbol, handle variable or keyword
                         variableHelper(keywords, stringBuilderVariable, lexemes);
+
+                        //line counter
+                        line ++;
+
+                        //reset line local position counter
+                        localPosition = 0;
                     }
                 }
 
@@ -90,7 +96,7 @@ public class Parser {
 
                 while (true) {
 
-                    c = text.charAt(j);
+                    c = text.getText().charAt(j);
 
                     if (c == 39) {
 
@@ -199,32 +205,12 @@ public class Parser {
         }
     }
 
-    private static void errorHelper(List<ILexeme> errors, String text, int position) {
+    private static void errorHelper(List<ILexeme> errors, Text text, int position, int line, int localPosition) {
 
-        int offset = 8, start, end, spacesLen;
+        String errorFragment = "error at: " + text.getLines().get(line);
+        String errorPosition = "unrecognized char at: line " + line + ", column " + localPosition;
 
-        if (position >= offset) {
-            start = position - offset;
-            spacesLen = offset + 1;
-        } else {
-            start = 0;
-            spacesLen = position + 1;
-        }
-
-        if (position + offset <= text.length() - 1) {
-            end = position + 8;
-        } else {
-            end = text.length() - 1;
-        }
-
-        char[] spaces = new char[spacesLen];
-        Arrays.fill(spaces, '_');
-        spaces[spaces.length - 1] = '^';
-
-        String errorFragment = text.substring(start, end + 1).replace((char)10, ' ');
-        String errorPosition = new String(spaces);
-
-        Error error = new Error("err", text.charAt(position) + "", (int)text.charAt(position), errorFragment, errorPosition);
+        Error error = new Error("err", text.getText().charAt(position) + "", (int)text.getText().charAt(position), errorFragment, errorPosition);
         errors.add(error);
     }
 }

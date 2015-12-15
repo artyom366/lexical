@@ -2,6 +2,7 @@ package tsi.lexical.analizator;
 
 import tsi.lexical.analizator.domain.ILexeme;
 import tsi.lexical.analizator.domain.Lexeme;
+import tsi.lexical.analizator.domain.Text;
 import tsi.lexical.analizator.parser.Parser;
 import tsi.lexical.analizator.utils.FileUtils;
 
@@ -46,7 +47,7 @@ public class App {
             return;
         }
 
-        String text = null;
+        Text text = null;
         try {
             text = FileUtils.fileReader(INPUT_FILE_NAME);
         } catch (IOException e) {

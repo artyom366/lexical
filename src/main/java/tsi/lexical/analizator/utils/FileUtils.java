@@ -3,6 +3,7 @@ package tsi.lexical.analizator.utils;
 
 import tsi.lexical.analizator.domain.ILexeme;
 import tsi.lexical.analizator.domain.Lexeme;
+import tsi.lexical.analizator.domain.Text;
 
 import java.io.*;
 import java.util.HashMap;
@@ -33,24 +34,42 @@ public class FileUtils {
         return paramMap;
     }
 
-    public static String fileReader(String fileName) throws IOException {
+    public static Text fileReader(String fileName) throws IOException {
 
         StringBuilder stringBuilder = new StringBuilder();
+        Map<Integer, String> lines = new HashMap<>();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
 
             System.out.println("File: " + fileName + "\n");
 
-            int value = 0;
-            while ((value = bufferedReader.read()) != -1) {
-                stringBuilder.append((char)value);
-                System.out.print((char) value);
+//            int value = 0;
+//            while ((value = bufferedReader.read()) != -1) {
+//                stringBuilder.append((char)value);
+//                System.out.print((char) value);
+//            }
+
+            String line;
+            int position = 1;
+            while((line = bufferedReader.readLine()) != null) {
+
+                stringBuilder.append(line);
+                stringBuilder.append((char)10);
+
+                lines.put(position, line);
+
+
+                System.out.println(position + "  " + line);
+
+                position++;
             }
 
             System.out.println("\n");
         }
 
-        return stringBuilder.toString();
+        Text text = new Text(stringBuilder.toString(), lines);
+
+        return text;
     }
 
     public static void resultWriter(List<ILexeme> lexemes, String fileName) throws IOException {
